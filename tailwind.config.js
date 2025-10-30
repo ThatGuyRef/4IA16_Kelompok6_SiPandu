@@ -3,6 +3,7 @@ import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
@@ -13,19 +14,24 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                display: ['Public Sans', 'sans-serif'],
             },
             colors: {
+                // Match the provided dashboard snippet palette
+                'background-light': '#f5f8f7',
+                'background-dark': '#0f231c',
                 primary: {
-                    50: '#f5faff',
-                    100: '#e8f4ff',
-                    200: '#cfe9ff',
-                    300: '#b5ddff',
-                    400: '#7ec8ff',
-                    500: '#3faeff',
-                    600: '#0a93f6',
-                    700: '#0572c4',
-                    800: '#045a9a',
-                    900: '#044066',
+                    DEFAULT: '#019863',
+                    50: '#ebfff6',
+                    100: '#cffde7',
+                    200: '#a0f6cf',
+                    300: '#6aeab4',
+                    400: '#35d997',
+                    500: '#019863',
+                    600: '#007a4f',
+                    700: '#026042',
+                    800: '#064d37',
+                    900: '#083f2f',
                 },
                 accent: {
                     50: '#fff8f5',
@@ -48,6 +54,9 @@ export default {
                     lg: '4rem',
                     xl: '6rem',
                 },
+            },
+            boxShadow: {
+                card: 'var(--card-shadow)',
             },
         },
     },

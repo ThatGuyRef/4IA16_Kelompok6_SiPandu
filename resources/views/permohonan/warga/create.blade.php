@@ -50,7 +50,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Nomor Telepon / WhatsApp</label>
-                        <input name="phone" type="tel" class="form-control" inputmode="tel" placeholder="0812xxxxxxx" value="{{ old('phone', auth()->check() ? auth()->user()->phone ?? '' : '') }}">
+                        <input name="phone" type="tel" class="form-control" inputmode="tel" placeholder="0812xxxxxxx" value="{{ old('phone', auth()->check() ? auth()->user()->phone ?? '' : '') }}" @if(auth()->check() && auth()->user()->role === 'warga') required @endif>
                     </div>
 
                     <!-- area untuk menampilkan input file yang relevan (pindah ke akhir form) -->

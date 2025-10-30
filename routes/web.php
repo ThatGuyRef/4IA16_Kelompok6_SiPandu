@@ -2,18 +2,23 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', function () {
+    if (Auth::check() && Auth::user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // Permohonan routes for warga
 use App\Http\Controllers\Permohonan\WargaPermohonanController;
 use App\Http\Controllers\Permohonan\AdminPermohonanController;
+use App\Http\Controllers\AdminDashboardController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan', [WargaPermohonanController::class, 'index'])->name('permohonan.warga.index');
@@ -22,15 +27,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Admin dashboard (protected by auth and role check)
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'role:admin'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.dashboard');
 
 // Admin permohonan management
 Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group(function(){
-    Route::get('permohonan', [AdminPermohonanController::class, 'index'])->name('permohonan.index');
-    Route::get('permohonan/{permohonan}', [AdminPermohonanController::class, 'show'])->name('permohonan.show');
+    Route::get('permohonan', [AdminDashboardController::class, 'permohonan'])->name('permohonan.index');
+    Route::get('permohonan/{permohonan}', [AdminDashboardController::class, 'show'])->name('permohonan.show');
     Route::put('permohonan/{permohonan}', [AdminPermohonanController::class, 'update'])->name('permohonan.update');
+
+    // Live metrics endpoint for dashboard polling
+    Route::get('metrics', [AdminDashboardController::class, 'metrics'])->name('metrics');
 });
 
 Route::middleware('auth')->group(function () {

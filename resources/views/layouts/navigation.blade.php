@@ -1,48 +1,58 @@
-<nav x-data="{ open: false }" class="bg-white/60 backdrop-blur border-b border-gray-100">
+<nav x-data="{ open: false }" class="nav">
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
+    <div class="nav-container">
+        <div class="nav-wrapper">
+            <div class="nav-left">
                 <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
-                        <x-application-logo class="block h-9 w-auto fill-current text-primary-600" />
-                        <span class="font-semibold text-lg text-gray-800">{{ config('app.name', 'Laravel') }}</span>
+                <div class="nav-logo">
+                    @php
+                        $homeRoute = (Auth::check() && Auth::user()->role === 'admin') ? route('admin.dashboard') : route('dashboard');
+                    @endphp
+                    <a href="{{ $homeRoute }}" class="nav-logo-link">
+                        <x-application-logo class="nav-logo-image" />
+                        <span class="nav-logo-text">{{ config('app.name', 'Laravel') }}</span>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                    @auth
-                        @if(Auth::user()->role === 'warga')
-                            <x-nav-link :href="route('permohonan.warga.create')" :active="request()->routeIs('permohonan.warga.create')">
-                                {{ __('Buat Permohonan') }}
-                            </x-nav-link>
-                            <x-nav-link :href="route('permohonan.warga.index')" :active="request()->routeIs('permohonan.warga.*')">
-                                {{ __('Permohonan Saya') }}
-                            </x-nav-link>
-                        @elseif(Auth::user()->role === 'admin')
-                            <x-nav-link :href="route('admin.permohonan.index')" :active="request()->routeIs('admin.permohonan.*')">
-                                {{ __('Laporan Permohonan') }}
-                            </x-nav-link>
-                        @endif
-                    @endauth
+                <div class="nav-links">
+                    @if(!request()->routeIs('dashboard') && !request()->routeIs('admin.dashboard'))
+                        @auth
+                            @php $dashRoute = (Auth::user()->role === 'admin') ? route('admin.dashboard') : route('dashboard'); @endphp
+                        @else
+                            @php $dashRoute = route('dashboard'); @endphp
+                        @endauth
+                        <x-nav-link :href="$dashRoute" :active="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                        @auth
+                            @if(Auth::user()->role === 'warga')
+                                <x-nav-link :href="route('permohonan.warga.create')" :active="request()->routeIs('permohonan.warga.create')">
+                                    {{ __('Buat Permohonan') }}
+                                </x-nav-link>
+                                <x-nav-link :href="route('permohonan.warga.index')" :active="request()->routeIs('permohonan.warga.*')">
+                                    {{ __('Permohonan Saya') }}
+                                </x-nav-link>
+                            @elseif(Auth::user()->role === 'admin')
+                                <x-nav-link :href="route('admin.permohonan.index')" :active="request()->routeIs('admin.permohonan.*')">
+                                    {{ __('Laporan Permohonan') }}
+                                </x-nav-link>
+                            @endif
+                        @endauth
+                    @endif
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="nav-right">
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition ease-in-out duration-150">
+                            <button class="dropdown-trigger">
                                 <div>{{ Auth::user()->name }}</div>
 
-                                <div class="ms-1">
-                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <div style="margin-left: 0.25rem;">
+                                    <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                     </svg>
                                 </div>
@@ -77,18 +87,18 @@
                     </x-dropdown>
                 @else
                     <div class="flex gap-3">
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 hover:underline">Login</a>
+                        <a href="{{ route('login') }}" class="text-sm text-gray-700">Login</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="text-sm text-primary-600 hover:underline">Register</a>
+                            <a href="{{ route('register') }}" class="text-sm" style="color: var(--color-primary);">Register</a>
                         @endif
                     </div>
                 @endauth
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+            <div class="nav-hamburger">
+                <button @click="open = ! open" class="nav-hamburger-button">
+                    <svg class="nav-hamburger-icon" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -98,22 +108,29 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+    <div :class="{'active': open}" class="nav-mobile">
+        @if(!request()->routeIs('dashboard') && !request()->routeIs('admin.dashboard'))
+        <div class="nav-mobile-links">
+            @auth
+                @php $dashRoute = (Auth::user()->role === 'admin') ? route('admin.dashboard') : route('dashboard'); @endphp
+            @else
+                @php $dashRoute = route('dashboard'); @endphp
+            @endauth
+            <x-responsive-nav-link :href="$dashRoute" :active="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
+        @endif
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <div class="nav-mobile-user">
             @auth
-                <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="nav-mobile-user-info">
+                    <div class="nav-mobile-user-name">{{ Auth::user()->name }}</div>
+                    <div class="nav-mobile-user-email">{{ Auth::user()->email }}</div>
                 </div>
 
-                <div class="mt-3 space-y-1">
+                <div class="nav-mobile-user-links">
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
@@ -139,8 +156,8 @@
                     </form>
                 </div>
             @else
-                <div class="px-4">
-                    <div class="mt-3 space-y-1">
+                <div class="nav-mobile-user-info">
+                    <div class="nav-mobile-user-links">
                         <x-responsive-nav-link :href="route('login')">{{ __('Login') }}</x-responsive-nav-link>
                         @if (Route::has('register'))
                             <x-responsive-nav-link :href="route('register')">{{ __('Register') }}</x-responsive-nav-link>

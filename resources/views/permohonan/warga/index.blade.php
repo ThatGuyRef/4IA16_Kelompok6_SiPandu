@@ -3,9 +3,9 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Permohonan Saya') }}</h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm sm:rounded-lg p-6">
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="card">
                 <a href="{{ route('permohonan.warga.create') }}" class="btn btn-primary mb-3">Buat Permohonan Baru</a>
 
                 @if(session('status'))<div class="alert alert-success">{{ session('status') }}</div>@endif

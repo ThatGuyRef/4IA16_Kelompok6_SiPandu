@@ -62,6 +62,11 @@ class WargaPermohonanController extends Controller
 
         $selectedType = $request->input('type');
 
+        // If the authenticated user is a warga, phone is required
+        if (Auth::check() && Auth::user()->role === 'warga') {
+            $rules['phone'] = ['required','string','max:32'];
+        }
+
         // Add validation rules for each possible document field
         foreach ($fieldsPerType as $typeKey => $fields) {
             foreach ($fields as $fieldKey => $isRequired) {
@@ -83,6 +88,11 @@ class WargaPermohonanController extends Controller
         $data = $request->validate($rules);
 
         $data['user_id'] = Auth::id();
+
+        // Maintain backwards-compatible DB column 'jenis_keperluan'
+        if (! empty($selectedType)) {
+            $data['jenis_keperluan'] = $selectedType;
+        }
 
         // prefer user nik if not provided in form
         if (empty($data['nik']) && Auth::user() && ! empty(Auth::user()->nik)) {

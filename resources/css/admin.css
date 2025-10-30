@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Admin-only CSS (separated from warga) */
+:root {
+    --sidebar-bg: #ffffff; /* Light sidebar to match new admin dashboard */
+    --sidebar-text: #111418;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@layer components {
+    /* Argon-inspired components for Admin */
+    .argon-card {
+        @apply bg-white rounded-lg shadow-card p-6 border-0;
+    }
+
+    .argon-sidebar {
+        background: var(--sidebar-bg);
+        color: var(--sidebar-text);
+        border-right: 1px solid #e5e7eb;
+    }
+
+    .argon-sidebar a {
+        @apply text-gray-800 hover:text-gray-900 transition-colors;
+    }
+
+    .argon-sidebar a.active {
+        @apply bg-primary-100 text-primary-700;
+    }
+
+    .argon-header {
+        @apply bg-white shadow-sm border-b border-gray-200;
+    }
+
+    .argon-main {
+        background: #f8f9fa;
+        min-height: calc(100vh - 64px);
+    }
+
+    .stat-card {
+        @apply argon-card relative overflow-hidden;
+    }
+
+    .stat-card .icon {
+        @apply absolute top-4 right-4 w-12 h-12 bg-primary-500 rounded-full flex items-center justify-center text-white;
+    }
+
+    .stat-card .number {
+        @apply text-2xl font-bold text-gray-800;
+    }
+
+    .stat-card .label {
+        @apply text-sm text-gray-600 mt-1;
+    }
+
+    /* Floating icon animation used in the provided dashboard snippet */
+    .floating-icon {
+        animation: float 3s ease-in-out infinite;
+        will-change: transform;
+    }
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+}
+
+@layer base {
+    body {
+        @apply font-display;
+    }
+}
+
+/* Ensure logo sizing and basic nav styling are available on admin pages even if app.css isn't loaded */
+.nav-logo-image {
+    height: 2.25rem;
+    width: auto;
+    display: block;
+}
+
+.nav {
+    background-color: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e5e7eb;
+}
+.nav-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    height: 4rem;
+}
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    margin-left: 2.5rem;
+}
+.nav-right {
+    display: flex;
+    align-items: center;
+    margin-left: 1.5rem;
+}
+.nav-hamburger {
+    display: none;
+}
+
+/* Nav link defaults to prevent unstyled text */
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem;
+    border-bottom: 2px solid transparent;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    text-decoration: none;
+    transition: all .15s ease-in-out;
+}
+.nav-link:hover {
+    color: #374151;
+    border-bottom-color: #d1d5db;
+}
+.nav-link.active {
+    color: #111827;
+    border-bottom-color: #818cf8;
+}
+
+/* ---- Admin Dashboard UI helpers (to match the provided mock) ---- */
+.card-elevated {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: var(--card-shadow);
+}
+
+.kpi {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+/* Badge styles for table statuses */
+.badge { 
+    display: inline-block; 
+    font-size: 0.75rem; 
+    line-height: 1rem;
+    padding: 0.125rem 0.5rem; 
+    border-radius: 0.375rem; 
+    font-weight: 600;
+}
+.badge-green { background-color: #d1fae5; color: #065f46; }
+.badge-yellow { background-color: #fef3c7; color: #92400e; }
+.badge-blue { background-color: #dbeafe; color: #1e40af; }
+.badge-red { background-color: #fee2e2; color: #991b1b; }
