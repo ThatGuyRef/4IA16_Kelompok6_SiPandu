@@ -59,3 +59,28 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## WhatsApp Notifications (Approval)
+
+This project can notify applicants via WhatsApp when an admin approves a permohonan (application) using the WhatsApp Cloud API.
+
+Setup:
+
+1. Create a WhatsApp Business App and get:
+	- Permanent Access Token
+	- Phone Number ID
+2. Add these to your `.env`:
+
+```
+WHATSAPP_ENABLED=true
+WHATSAPP_TOKEN="<your-permanent-access-token>"
+WHATSAPP_PHONE_NUMBER_ID="<your-phone-number-id>"
+```
+
+Notes:
+- Phone numbers should be in international format. Indonesian numbers like `08xxxxxxxxxx` will be normalized to `628xxxxxxxxxx` automatically.
+- Messages are sent synchronously when status changes to `approved`. If you prefer queueing, wire the `WhatsAppService::sendMessage` call into a queued Job.
+- Links in the message point to the applicant detail and print pages. Ensure `APP_URL` is correctly set in `.env` so URLs are absolute.
+
+Security:
+- If `WHATSAPP_ENABLED` is false or credentials are missing, the app will skip sending and log a warning.

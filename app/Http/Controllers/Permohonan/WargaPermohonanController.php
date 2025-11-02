@@ -117,8 +117,42 @@ class WargaPermohonanController extends Controller
 
         $data['dokumen_json'] = $dokumen ?: null;
 
-        Permohonan::create($data);
+        $permohonan = Permohonan::create($data);
 
-        return redirect()->route('permohonan.warga.index')->with('status','Permohonan berhasil dikirim.');
+        // Redirect to confirmation page
+        return redirect()->route('permohonan.warga.confirm', $permohonan);
+    }
+
+    /**
+     * Show confirmation screen for last or specific submission
+     */
+    public function confirm(?Permohonan $permohonan = null)
+    {
+        $user = Auth::user();
+        if (!$permohonan) {
+            $permohonan = Permohonan::where('user_id', $user->id)->latest()->first();
+        }
+        if (!$permohonan || $permohonan->user_id !== $user->id) {
+            abort(404);
+        }
+
+        return view('permohonan.warga.confirm', [
+            'permohonan' => $permohonan,
+        ]);
+    }
+
+    /**
+     * Show detail of a specific permohonan for the authenticated warga
+     */
+    public function show(Permohonan $permohonan)
+    {
+        $user = Auth::user();
+        if (!$permohonan || $permohonan->user_id !== $user->id) {
+            abort(404);
+        }
+
+        return view('permohonan.warga.show', [
+            'permohonan' => $permohonan,
+        ]);
     }
 }

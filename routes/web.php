@@ -24,6 +24,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan', [WargaPermohonanController::class, 'index'])->name('permohonan.warga.index');
     Route::get('/permohonan/create', [WargaPermohonanController::class, 'create'])->name('permohonan.warga.create');
     Route::post('/permohonan', [WargaPermohonanController::class, 'store'])->name('permohonan.warga.store');
+    // Confirmation page after submit
+    Route::get('/permohonan/confirm/{permohonan?}', [WargaPermohonanController::class, 'confirm'])->name('permohonan.warga.confirm');
+    // Detail permohonan for warga
+    Route::get('/permohonan/{permohonan}', [WargaPermohonanController::class, 'show'])->name('permohonan.warga.show');
 });
 
 // Admin dashboard (protected by auth and role check)
@@ -33,9 +37,9 @@ Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
 
 // Admin permohonan management
 Route::middleware(['auth','role:admin'])->prefix('admin')->name('admin.')->group(function(){
-    Route::get('permohonan', [AdminDashboardController::class, 'permohonan'])->name('permohonan.index');
-    Route::get('permohonan/{permohonan}', [AdminDashboardController::class, 'show'])->name('permohonan.show');
-    Route::put('permohonan/{permohonan}', [AdminPermohonanController::class, 'update'])->name('permohonan.update');
+    Route::get('permohonan', [AdminPermohonanController::class, 'index'])->name('permohonan.index');
+    Route::get('permohonan/{permohonan}', [AdminPermohonanController::class, 'show'])->name('permohonan.show');
+    Route::patch('permohonan/{permohonan}', [AdminPermohonanController::class, 'update'])->name('permohonan.update');
 
     // Live metrics endpoint for dashboard polling
     Route::get('metrics', [AdminDashboardController::class, 'metrics'])->name('metrics');

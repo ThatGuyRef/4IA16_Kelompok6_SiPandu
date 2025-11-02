@@ -20,30 +20,7 @@
         </div>
     </x-slot>
 
-<x-slot name="sidebar">
-        <div class="space-y-2">
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'bg-primary/20 dark:bg-primary/30' : 'hover:bg-gray-100 dark:hover:bg-gray-800' }}">
-                <span class="material-symbols-outlined {{ request()->routeIs('admin.dashboard') ? 'text-primary dark:text-white' : 'text-[#111418] dark:text-gray-300' }}">dashboard</span>
-                <p class="{{ request()->routeIs('admin.dashboard') ? 'text-primary dark:text-white' : 'text-[#111418] dark:text-gray-300' }} text-sm font-medium leading-normal">Dashboard</p>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition-colors">
-                <span class="material-symbols-outlined">groups</span>
-                <span>Manajemen Penduduk</span>
-            </a>
-            <a href="{{ route('admin.dashboard', ['section' => 'permohonan']) }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ (request()->routeIs('admin.dashboard') && request()->get('section') === 'permohonan') ? 'bg-primary/20 dark:bg-primary/30' : 'hover:bg-gray-100 dark:hover:bg-gray-800' }}">
-                <span class="material-symbols-outlined {{ (request()->routeIs('admin.dashboard') && request()->get('section') === 'permohonan') ? 'text-primary dark:text-white' : 'text-[#111418] dark:text-gray-300' }}">description</span>
-                <span class="{{ (request()->routeIs('admin.dashboard') && request()->get('section') === 'permohonan') ? 'text-primary dark:text-white' : 'text-[#111418] dark:text-gray-300' }}">Kelola Permohonan</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition-colors">
-                <span class="material-symbols-outlined">assessment</span>
-                <span>Laporan</span>
-            </a>
-            <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-white hover:bg-opacity-10 transition-colors">
-                <span class="material-symbols-outlined">settings</span>
-                <span>Pengaturan</span>
-            </a>
-        </div>
-    </x-slot>
+    
 
 
     <!-- Alert Banner -->
@@ -113,65 +90,26 @@
                                 <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">#{{ $p->id }}</td>
                                 <td class="px-4 py-3">{{ $p->nama ?? optional($p->user)->name ?? '—' }}</td>
                                 <td class="px-4 py-3">{{ $p->type ?? '—' }}</td>
-                                <td class="px-4 py-3">{{ optional($p->created_at)->format('Y-m-d') }}</td>
+                                <td class="px-4 py-3">
+                                    <time data-relative-time="{{ optional($p->created_at)->toIso8601String() }}" title="{{ optional($p->created_at)->format('d M Y H:i') }}">
+                                        {{ optional($p->created_at)->format('Y-m-d') }}
+                                    </time>
+                                </td>
                                 <td class="px-4 py-3">
                                     <span class="{{ $badgeClasses }}">{{ $statusLabel }}</span>
                                 </td>
-                                    <td class="px-4 py-3">
-                                        <a href="{{ route('admin.permohonan.show', $p) }}" class="text-primary-700 hover:text-primary-900">Detail</a>
-                                    </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="px-4 py-6 text-center text-sm text-gray-500">Belum ada permohonan.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- Quick Links Panel -->
-        <div class="lg:w-1/3 card-elevated p-6">
-            <h2 class="text-[#111418] text-xl font-bold leading-tight tracking-tight mb-4">Tautan Cepat</h2>
-            <div class="flex flex-col gap-4">
-                <a class="flex items-center gap-4 p-4 rounded-lg bg-gray-50 hover:bg-gray-100" href="#">
-                    <span class="material-symbols-outlined text-primary text-3xl">person_add</span>
-                    <p class="text-[#111418] font-medium">Tambah Data Penduduk Baru</p>
-                </a>
-                <a class="flex items-center gap-4 p-4 rounded-lg bg-gray-50 hover:bg-gray-100" href="{{ route('admin.dashboard', ['section' => 'permohonan']) }}">
-                    <span class="material-symbols-outlined text-primary text-3xl">add_to_drive</span>
-                    <p class="text-[#111418] font-medium">Kelola Permohonan</p>
-                </a>
-                <a class="flex items-center gap-4 p-4 rounded-lg bg-gray-50 hover:bg-gray-100" href="#">
-                    <span class="material-symbols-outlined text-primary text-3xl">summarize</span>
-                    <p class="text-[#111418] font-medium">Lihat Laporan Bulanan</p>
-                </a>
-            </div>
-        </div>
-    </div>
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const format = new Intl.NumberFormat();
-    function setValue(id, value) {
-        const el = document.getElementById(id);
-        if (el) el.textContent = format.format((value == null) ? 0 : value);
-    }
-    async function refreshMetrics() {
-        try {
-            const res = await fetch("{{ route('admin.metrics') }}", { headers: { "X-Requested-With": "XMLHttpRequest" } });
-            if (!res.ok) return;
-            const d = await res.json();
-            setValue('totalWargaValue', d.totalWarga);
-            setValue('processingCountValue', (d.processingCount != null) ? d.processingCount : d.pendingCount);
-            setValue('approvedCountValue', d.approvedCount);
-        } catch (e) {
-            // silent
-        }
-    }
-    refreshMetrics();
-    setInterval(refreshMetrics, 5000);
-});
-</script>
-@endpush
-</x-dashboard-layout>
+                                                                <td class="px-4 py-3">
+                                                                    <a href="{{ route('admin.permohonan.show', $p) }}" class="text-primary-700 hover:text-primary-900">Detail</a>
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="6" class="px-4 py-6 text-center text-sm text-gray-500">Belum ada permohonan.</td>
+                                                            </tr>
+                                                        @endforelse
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </x-dashboard-layout>

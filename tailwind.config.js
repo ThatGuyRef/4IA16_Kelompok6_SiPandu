@@ -4,6 +4,11 @@ import forms from '@tailwindcss/forms';
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: 'class',
+    safelist: [
+        'translate-x-0',
+        '-translate-x-full',
+        'md:translate-x-0',
+    ],
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',

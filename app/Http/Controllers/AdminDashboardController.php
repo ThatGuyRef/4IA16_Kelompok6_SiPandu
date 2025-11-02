@@ -18,6 +18,9 @@ class AdminDashboardController extends Controller
         $processingCount = Permohonan::where('status', 'processing')->count();
         $approvedCount = Permohonan::where('status', 'approved')->count();
         $pendingCount = Permohonan::where('status', 'pending')->count();
+        $totalPermohonanThisMonth = Permohonan::whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
+        $jenisSuratTersedia = Permohonan::select('type')->distinct()->count();
+        $recentPermohonans = Permohonan::with('user')->latest()->limit(8)->get();
 
         // Determine section and optionally load inline permohonan list or detail
         $section = $request->query('section');
@@ -37,6 +40,9 @@ class AdminDashboardController extends Controller
             'processingCount' => $processingCount,
             'approvedCount'   => $approvedCount,
             'pendingCount'    => $pendingCount,
+            'totalPermohonanThisMonth' => $totalPermohonanThisMonth,
+            'jenisSuratTersedia' => $jenisSuratTersedia,
+            'recentPermohonans' => $recentPermohonans,
             'permohonans'     => $permohonans,
             'permohonan'      => $permohonan,
         ]);
