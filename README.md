@@ -4,7 +4,7 @@ Fungsi utama aplikasi ini adalah mempermudah petugas kelurahan maupun masyarakat
 
 Disusun oleh :
 1. Rahma Nabila Zahra Saraswati as a Project Manager ( mengoordinasikan timeline proyek dan membagi tugas anggota tim, membuat laporan proposan serta memberikan point penting pada laporan dokumentasi yang ada serta merevisi laporan yang ada meliputi proposal itu sendiri, laporan pendahuluan, laporan antara, dan laporan akhir )
-2. Navvaro Refi Kamal as a Fullstack Developer ( mengembangkan antarmuka sistem SI-PANDU agar dapat di gunakan sesuai dengan kebutuhan admin kelurahan dan warga, mengelola autentikasi pengguna, mengatur hak akses pada peran admin dan warga )
+2. Navarro Reffi Kamal as a Fullstack Developer ( mengembangkan antarmuka sistem SI-PANDU agar dapat di gunakan sesuai dengan kebutuhan admin kelurahan dan warga, mengelola autentikasi pengguna, mengatur hak akses pada peran admin dan warga )
 3. Raihan Sulung Pradana as a Technical Writer ( menuliskan dokumen proyek SI-PANDU bersama PM yang merevisi seluruh laporan dokumentasi yang di buat meliputi laporan pendahuluan, laporan antara, laporan akhir, melakukan pembaruan/update laporan sesuai dengan perkembangan selama perkembangan sistem )
 4. Zefa Kuat Mandiri Sinaga as a Design UI/UX & Testing ( merancang tampilan antarmuka, melakukann pengujian fungsiaonal sistem dari sisi admin kelurahan dan warga)
 
